@@ -1,8 +1,7 @@
 name: Refresh go report card
 
-on: 
+on:
   workflow_call:
-
 
 jobs:
 
