@@ -8,18 +8,19 @@ jobs:
   build_test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@main
       with:
         fetch-depth: 2
 
-    - name: Get latest go version
-      id: get-semantic-version
-      run: echo "::set-output name=SEMANTIC_VERSION::$(curl https://go.dev/VERSION?m=text | cut -c 3-)"
+    #- name: Get latest go version
+    #  id: get-semantic-version
+    #  run: echo "::set-output name=SEMANTIC_VERSION::$(curl https://go.dev/VERSION?m=text | cut -c 3-)"
 
     - name: Set up Go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@main
       with:
-        go-version: ${{steps.get-semantic-version.outputs.SEMANTIC_VERSION}}
+        check-latest: true
+        #go-version: ${{steps.get-semantic-version.outputs.SEMANTIC_VERSION}}
 
     - name: Build
       run: go build -v ./...
