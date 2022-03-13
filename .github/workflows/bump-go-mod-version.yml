@@ -6,8 +6,10 @@ on:
 jobs:
 
   build:
+    name: Update go mod version and create pull request
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repository
     - uses: actions/checkout@main
 
     - name: Set up Go
