@@ -11,11 +11,14 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@main
+      
+    - name: Get latest go version
+      run: echo "latest_go_version=$(curl https://go.dev/VERSION?m=text | cut -c 3-)" >> $GITHUB_ENV
 
     - name: Set up Go
       uses: actions/setup-go@main
       with:
-        check-latest: true
+        go-version: ${{ env.latest_go_version }}
     
     - name: Get latest go mod version
       run: echo "latest_go_mod_version=$(go env GOVERSION | cut -c 3-6)" >> $GITHUB_ENV
