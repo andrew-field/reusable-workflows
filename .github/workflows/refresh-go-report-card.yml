@@ -6,6 +6,7 @@ on:
 jobs:
 
   post-request:
+    name: Update go report card
     runs-on: ubuntu-latest
     steps:
 
