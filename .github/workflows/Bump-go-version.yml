@@ -1,0 +1,31 @@
+name: Bump-go-version
+
+on:
+  workflow_call:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+
+    - name: Set up Go
+      uses: actions/setup-go@main
+      with:
+        check-latest: true
+    
+    - name: Get latest go mod version
+      run: echo "latest_go_mod_version=$(go env GOVERSION | cut -c 3-6)" >> $GITHUB_ENV
+
+    - name: Update go version in go mod # Update minimum go version
+      run: go mod edit -go ${{ env.latest_go_mod_version }}
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@main
+      with:
+        commit-message: go mod version ${{ env.latest_go_mod_version }}
+        branch: bump-go-mod
+        delete-branch: true
+        title: Update go mod version to ${{ env.latest_go_mod_version }}
+        labels: automated
