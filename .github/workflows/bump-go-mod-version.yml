@@ -5,7 +5,7 @@ on:
 
 jobs:
 
-  build:
+  check_go_mod_version:
     name: Update go mod version and create pull request
     runs-on: ubuntu-latest
     steps:
