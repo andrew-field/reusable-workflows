@@ -1,4 +1,4 @@
-name: Bump-go-version
+name: bump-go-version
 
 on:
   workflow_call:
