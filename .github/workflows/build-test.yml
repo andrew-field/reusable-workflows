@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@main
       with:
-        fetch-depth: 2
+        fetch-depth: 2  # Needed I think for the test coverage report.
 
     #- name: Get latest go version
     #  id: get-semantic-version
