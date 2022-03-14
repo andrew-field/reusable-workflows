@@ -13,10 +13,6 @@ jobs:
       uses: actions/checkout@main
       with:
         fetch-depth: 2  # Needed I think for the test coverage report.
-
-    #- name: Get latest go version
-    #  id: get-semantic-version
-    #  run: echo "::set-output name=SEMANTIC_VERSION::$(curl https://go.dev/VERSION?m=text | cut -c 3-)"
     
     - name: Get latest go version
       run: echo "latest_go_version=$(curl https://go.dev/VERSION?m=text | cut -c 3-)" >> $GITHUB_ENV
@@ -25,7 +21,6 @@ jobs:
       uses: actions/setup-go@main
       with:
         go-version: ${{ env.latest_go_version }}
-        #go-version: ${{steps.get-semantic-version.outputs.SEMANTIC_VERSION}}
 
     - name: Build
       run: go build -v ./...
