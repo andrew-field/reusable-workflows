@@ -40,3 +40,4 @@ jobs:
 
             [1]: https://github.com/andrew-field/reusable-workflows/actions/workflows/bump-go-mod-version.yml
         labels: automated
+        assignees: andrew-field
