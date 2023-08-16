@@ -20,7 +20,7 @@ jobs:
         fetch-depth: 2  # Needed I think for the test coverage report.
     
     - name: Get latest go version
-      run: echo "latest_go_version=$(curl https://go.dev/VERSION?m=text | cut -d'o' -f2 | cut -d' ' -f1)" >> $GITHUB_ENV
+      run: echo "latest_go_version=$(curl https://go.dev/VERSION?m=text | grep -oP '(\d+\.\d+\.\d+)')" >> $GITHUB_ENV
 
     - name: Set up Go
       uses: actions/setup-go@main
