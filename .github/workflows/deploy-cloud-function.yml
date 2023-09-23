@@ -7,6 +7,13 @@ on:
         description: 'Name of cloud function'
         required: true
         type: string
+    secrets:
+      WIP:
+        required: true
+      SA:
+        required: true
+      GAP:
+        required: true
 
 jobs:
   deploy:
