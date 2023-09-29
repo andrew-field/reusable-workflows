@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repoistory
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
       with:
         fetch-depth: 2  # Needed I think for the test coverage report.
     
@@ -23,7 +23,7 @@ jobs:
       run: echo "latest_go_version=$(curl https://go.dev/VERSION?m=text | grep -oP '(\d+\.\d+\.\d+)')" >> $GITHUB_ENV
 
     - name: Set up Go
-      uses: actions/setup-go@main
+      uses: actions/setup-go@v4
       with:
         go-version: ${{ env.latest_go_version }}
 
