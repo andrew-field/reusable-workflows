@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
       
     - name: Get latest go version
       run: echo "latest_go_version=$(curl https://go.dev/VERSION?m=text | grep -oP '(\d+\.\d+\.\d+)')" >> $GITHUB_ENV
 
     - name: Set up Go
-      uses: actions/setup-go@main
+      uses: actions/setup-go@v4
       with:
         go-version: ${{ env.latest_go_version }}
 
@@ -24,7 +24,7 @@ jobs:
       run: go mod edit -go ${{ env.latest_go_version }}
 
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@main
+      uses: peter-evans/create-pull-request@v5
       with:
         commit-message: go mod version ${{ env.latest_go_version }}
         author: GitHub <noreply@github.com>
