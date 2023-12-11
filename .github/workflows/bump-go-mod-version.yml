@@ -16,7 +16,7 @@ jobs:
       run: echo "latest_go_version=$(curl https://go.dev/VERSION?m=text | grep -oP '(\d+\.\d+\.\d+)')" >> $GITHUB_ENV
 
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v5
       with:
         go-version: ${{ env.latest_go_version }}
 
