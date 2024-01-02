@@ -37,7 +37,7 @@ jobs:
 # This might also be useful: https://www.youtube.com/watch?v=ZgVhU5qvK1M
 
       - name: Set up Cloud SDK
-        uses: 'google-github-actions/setup-gcloud@v1'
+        uses: 'google-github-actions/setup-gcloud@v2'
         with:
           version: '>= 363.0.0'
 
