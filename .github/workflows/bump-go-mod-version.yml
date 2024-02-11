@@ -27,7 +27,6 @@ jobs:
       uses: peter-evans/create-pull-request@v6
       with:
         commit-message: go mod version ${{ env.latest_go_version }}
-        author: GitHub <noreply@github.com>
         branch: bump-go-mod
         delete-branch: true
         title: Update go version to ${{ env.latest_go_version }}
