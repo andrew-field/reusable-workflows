@@ -36,4 +36,6 @@ jobs:
       run: find . -name '*.go' -execdir go test -v -coverprofile=coverage.out -covermode=atomic ${{ inputs.test_flags }} \;
 
     - name: Upload coverage to Codecov
-      run: bash <(curl -s https://codecov.io/bash)
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
