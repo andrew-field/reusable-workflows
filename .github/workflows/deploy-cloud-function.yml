@@ -34,8 +34,20 @@ jobs:
           service_account: ${{ secrets.SA }}
           project_id: pickmypostcode3
 
-      - id: 'deploy'
-        uses: 'google-github-actions/deploy-cloud-functions@v3'
+      # Setup gcloud
+      - name: Set up Cloud SDK
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      # Delete old artifacts
+      - name: Delete old artifacts
+        run: gcloud artifacts docker images delete us-west1-docker.pkg.dev/pickmypostcode3/gcf-artifacts/luckydip
+
+      # Delete artifact cache
+      - name: Delete old artifact cache
+        run: gcloud artifacts docker images delete us-west1-docker.pkg.dev/pickmypostcode3/gcf-artifacts/luckydip/cache
+
+      - name: Deploy
+        uses: google-github-actions/deploy-cloud-functions@v3
         timeout-minutes: 10
         with:
           name: ${{ inputs.function_name }}
