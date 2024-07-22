@@ -42,10 +42,6 @@ jobs:
       - name: Delete old artifacts
         run: gcloud artifacts docker images delete us-west1-docker.pkg.dev/pickmypostcode3/gcf-artifacts/luckydip
 
-      # Delete artifact cache
-      - name: Delete old artifact cache
-        run: gcloud artifacts docker images delete us-west1-docker.pkg.dev/pickmypostcode3/gcf-artifacts/luckydip/cache
-
       - name: Deploy
         uses: google-github-actions/deploy-cloud-functions@v3
         timeout-minutes: 10
@@ -74,3 +70,7 @@ jobs:
 
 #      - name: Deploy
 #        run: 'gcloud functions deploy ${{ inputs.function_name }} --runtime=go122 --region=us-west1 --trigger-http --allow-unauthenticated --entry-point=HelloHTTP --memory=2Gi --timeout=300s --set-env-vars=GOOGLEAPPPASSWORD=${{ secrets.GAP }} --max-instances=1'
+
+      # Delete artifact cache. The cloud function does not seem to need the cache to run, this takes up space, and the artifact registry might have too much in.
+      - name: Delete old artifact cache
+        run: gcloud artifacts docker images delete us-west1-docker.pkg.dev/pickmypostcode3/gcf-artifacts/luckydip/cache
