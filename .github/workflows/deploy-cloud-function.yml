@@ -54,10 +54,10 @@ jobs:
           region: us-west1
           runtime: go122
           entry_point: HelloHTTP
-          memory: 2Gi
+          memory: 4Gi
           environment_variables: GOOGLEAPPPASSWORD=${{ secrets.GAP }}
           max_instance_count: 1
-          service_timeout: 300s
+          service_timeout: 200s
           # Not sure how to set trigger to http. event_trigger_type: http changes the trigger to an event type(?). At the moment, the trigger does not change from the current http.
 # New deployments are automatically private services, while deploying a revision of a public (unauthenticated) service will preserve the IAM setting of public (unauthenticated).
 # The function has been set to allow unauthenticated so it will continue to be unauthenticated. i.e. don't delete the function or set the function to allow unauthenticated after a new fresh deploy.
