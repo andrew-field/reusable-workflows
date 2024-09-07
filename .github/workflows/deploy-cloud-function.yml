@@ -48,7 +48,7 @@ jobs:
         with:
           name: ${{ inputs.function_name }}
           region: us-west1
-          runtime: go123
+          runtime: go122
           entry_point: HelloHTTP
           memory: 4Gi
           environment_variables: GOOGLEAPPPASSWORD=${{ secrets.GAP }}
