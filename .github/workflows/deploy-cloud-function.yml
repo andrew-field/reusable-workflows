@@ -39,8 +39,8 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v2'
 
       # Delete old artifacts
-      - name: Delete old artifacts
-        run: gcloud artifacts docker images delete us-west1-docker.pkg.dev/pickmypostcode3/gcf-artifacts/luckydip
+      #- name: Delete old artifacts
+       # run: gcloud artifacts docker images delete us-west1-docker.pkg.dev/pickmypostcode3/gcf-artifacts/luckydip
 
       - name: Deploy
         uses: google-github-actions/deploy-cloud-functions@v3
