@@ -39,8 +39,8 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v2'
 
       # Delete old artifacts
-      #- name: Delete old artifacts
-       # run: gcloud artifacts docker images delete us-west1-docker.pkg.dev/pickmypostcode3/gcf-artifacts/luckydip
+      - name: Delete old artifacts
+        run: gcloud artifacts docker images delete us-west1-docker.pkg.dev/pickmypostcode3/gcf-artifacts/pickmypostcode3__us--west1__luckydip
 
       - name: Deploy
         uses: google-github-actions/deploy-cloud-functions@v3
@@ -73,4 +73,4 @@ jobs:
 
       # Delete artifact cache. The cloud function does not seem to need the cache to run, this takes up space, and the artifact registry might have too much in.
       - name: Delete old artifact cache
-        run: gcloud artifacts docker images delete us-west1-docker.pkg.dev/pickmypostcode3/gcf-artifacts/luckydip/cache
+        run: gcloud artifacts docker images delete us-west1-docker.pkg.dev/pickmypostcode3/gcf-artifacts/pickmypostcode3__us--west1__luckydip/cache
