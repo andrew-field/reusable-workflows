@@ -14,7 +14,7 @@ on:
         required: true
       GAP:
         required: true
-# Can't store these secret locally in the repoistory, they must be passed from the calling workflow.
+# Can't store these secrets locally in the repoistory, they must be passed from the calling workflow.
 
 jobs:
   deploy:
