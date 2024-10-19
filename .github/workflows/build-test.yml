@@ -14,23 +14,41 @@ jobs:
     name: Build and test
     runs-on: ubuntu-latest
     steps:
+      # Get the code.
     - name: Checkout repoistory
       uses: actions/checkout@v4
       with:
         fetch-depth: 2  # Needed I think for the test coverage report.
-    
+
+      # Fetch the latest go version as text to build and test with the latest go version.
+      # This works under the principle of keeping up to date with the latest releases.
     - name: Get latest go version
       run: echo "latest_go_version=$(curl https://go.dev/VERSION?m=text | grep -oP '(\d+\.\d+\.\d+)')" >> $GITHUB_ENV
 
+      # Get the latest go runtime.
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
         go-version: ${{ env.latest_go_version }}
 
+    # Make sure all packages build.
     - name: Build
-      run: find . -name '*.go' -execdir go build -v \;
+      run: go build -v ./...
+
+      # This was the old command for the build step.
+    # - name: Build
+      # run: find . -name '*.go' -execdir go build -v \;
       # This command will search for all Go files in the current directory and all subdirectories. For each Go file found, it will change to the directory of the file (execdir) and execute go build -v.
-      # Please note that go build will only build packages, not individual files. If a directory does not contain a package, go build will not do anything
+      # Go build will only build packages, not individual files. If a directory does not contain a package, go build will not do anything.
+
+    # Run the go vet command which is a sort of go code checker.
+    - name: Vet
+      run: go vet -v ./...
+
+    - name: Static check
+      uses: dominikh/staticcheck-action@v1
+      with:
+        install-go: false
 
     - name: Test and run coverage
       run: find . -name '*.go' -execdir go test -v -coverprofile=coverage.out -covermode=atomic ${{ inputs.test_flags }} \;
