@@ -35,24 +35,21 @@ jobs:
     - name: Build
       run: go build -v ./...
 
-      # This was the old command for the build step.
-    # - name: Build
-      # run: find . -name '*.go' -execdir go build -v \;
-      # This command will search for all Go files in the current directory and all subdirectories. For each Go file found, it will change to the directory of the file (execdir) and execute go build -v.
-      # Go build will only build packages, not individual files. If a directory does not contain a package, go build will not do anything.
-
     # Run the go vet command which is a sort of go code checker.
     - name: Vet
       run: go vet -v ./...
 
+    # Run the static check of the code, which is a sort of official "state of the art linter".
     - name: Static check
       uses: dominikh/staticcheck-action@v1
       with:
         install-go: false
 
+    # Runs the tests.
     - name: Test and run coverage
       run: find . -name '*.go' -execdir go test -v -coverprofile=coverage.out -covermode=atomic ${{ inputs.test_flags }} \;
 
+    # Upload the test results to Codecov.
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:
