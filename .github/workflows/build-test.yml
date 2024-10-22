@@ -47,7 +47,7 @@ jobs:
 
     # Runs the tests.
     - name: Test and run coverage
-      run: find . -name '*.go' -execdir go test -v -coverprofile=coverage.out -covermode=atomic ${{ inputs.test_flags }} \;
+      run: go test -v ./... -coverprofile=coverage.out -covermode=atomic ${{ inputs.test_flags }} \;
 
     # Upload the test results to Codecov.
     - name: Upload coverage to Codecov
