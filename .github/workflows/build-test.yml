@@ -4,53 +4,52 @@ on:
   workflow_call:
     inputs:
       test_flags:
-        description: 'Extra flags to be used with the go test step'
+        description: "Extra flags to be used with the go test step"
         required: false
         type: string
 
 jobs:
-
   build_test:
     name: Build and test
     runs-on: ubuntu-latest
     steps:
       # Get the code.
-    - name: Checkout repoistory
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 2  # Needed I think for the test coverage report.
+      - name: Checkout repoistory
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # Needed I think for the test coverage report.
 
-      # Fetch the latest go version as text to build and test with the latest go version.
-      # This works under the principle of keeping up to date with the latest releases.
-    - name: Get latest go version
-      run: echo "latest_go_version=$(curl https://go.dev/VERSION?m=text | grep -oP '(\d+\.\d+\.\d+)')" >> $GITHUB_ENV
+        # Fetch the latest go version as text to build and test with the latest go version.
+        # This works under the principle of keeping up to date with the latest releases.
+      - name: Get latest go version
+        run: echo "latest_go_version=$(curl https://go.dev/VERSION?m=text | grep -oP '(\d+\.\d+\.\d+)')" >> $GITHUB_ENV
 
-      # Get the latest go runtime.
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: ${{ env.latest_go_version }}
+        # Get the latest go runtime.
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.latest_go_version }}
 
-    # Make sure all packages build.
-    - name: Build
-      run: go build -v ./...
+      # Make sure all packages build.
+      - name: Build
+        run: go build -v ./...
 
-    # Run the go vet command which is a sort of go code checker.
-    - name: Vet
-      run: go vet -v ./...
+      # Run the go vet command which is a sort of go code checker.
+      - name: Vet
+        run: go vet -v ./...
 
-    # Run the static check of the code, which is a sort of official "state of the art linter".
-    - name: Static check
-      uses: dominikh/staticcheck-action@v1
-      with:
-        install-go: false
+      # Run the static check of the code, which is a sort of official "state of the art linter".
+      - name: Static check
+        uses: dominikh/staticcheck-action@v1
+        with:
+          install-go: false
 
-    # Runs the tests.
-    - name: Test and run coverage
-      run: go test -v ./... -coverprofile=coverage.out -covermode=atomic ${{ inputs.test_flags }} \;
+      # Runs the tests.
+      - name: Test and run coverage
+        run: go test -v ./... -coverprofile=coverage.out -covermode=atomic ${{ inputs.test_flags }} \;
 
-    # Upload the test results to Codecov.
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+      # Upload the test results to Codecov.
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
