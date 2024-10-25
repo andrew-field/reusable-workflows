@@ -23,4 +23,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_GO_RELEASER: false
-          VALIDATE_GO: false
+          VALIDATE_GO: false // This is false because VALIDATE_GO_MODULES do all the go linting.
