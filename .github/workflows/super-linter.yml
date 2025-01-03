@@ -1,4 +1,5 @@
-name: Lint Code Base
+name: Lint Code Base Using Super Linter
+# This super linter should be used as a guide and indication ans is not correct all of the time.
 
 on:
   workflow_call:
