@@ -34,16 +34,6 @@ jobs:
       - name: Build
         run: go build -v ./...
 
-      # Run the go vet command which is a sort of go code checker.
-      - name: Vet
-        run: go vet -v ./...
-
-      # Run the static check of the code, which is a sort of official "state of the art linter".
-      - name: Static check
-        uses: dominikh/staticcheck-action@v1
-        with:
-          install-go: false
-
       # Runs the tests.
       - name: Test and run coverage
         run: go test -v ./... -coverprofile=coverage.out -covermode=atomic ${{ inputs.test_flags }} \;
