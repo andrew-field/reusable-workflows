@@ -15,7 +15,7 @@ jobs:
         with:
           fetch-depth: 1
 
-      # Run the static check of the code, which is a sort of official "state of the art linter".
+      # Run the static check of the code, which is a sort of official "state of the art linter". Also installs go.
       - name: Static check
         uses: dominikh/staticcheck-action@v1
         with:
