@@ -12,7 +12,6 @@ jobs:
   build_test:
     name: Build and test
     runs-on: ubuntu-latest
-    timeout-minutes: 20 # Increase the timeout to 20 minutes.
     steps:
       # Get the code.
       - name: Checkout repoistory
