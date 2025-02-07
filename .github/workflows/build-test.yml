@@ -32,7 +32,7 @@ jobs:
 
       # Make sure all packages build.
       - name: Build
-        run: go build -v ./...
+        run: go build ./...
 
       # Runs the tests.
       - name: Test and run coverage
