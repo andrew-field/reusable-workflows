@@ -34,7 +34,7 @@ jobs:
       - name: Build
         run: go build ./...
 
-      # Runs the tests.
+      # Runs the unit tests. Can not run the fuzz tests here because of the coverprofile flag which is designed for specific, defined tests with predictable inputs and outputs.
       - name: Test and run coverage
         run: go test ./... -coverprofile=coverage.out -covermode=atomic ${{ inputs.test_flags }} \;
 
@@ -43,3 +43,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
+      # Runs the just fuzz tests.
+      - name: Execute fuzz tests
+        run: go test ./... -run -fuzz=. -fuzztime 30s
