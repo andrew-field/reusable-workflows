@@ -44,6 +44,6 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
-      # Runs the just fuzz tests.
+      # Runs just the fuzz tests.
       - name: Execute fuzz tests
-        run: go test ./... -run -fuzz Fuzz -fuzztime 30s
+        run: go test ./... -fuzz Fuzz -fuzztime 30s -run=^$
