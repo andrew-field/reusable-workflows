@@ -46,8 +46,14 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       # Runs just the fuzz tests.
+      # Using go test ./... -fuzz Fuzz -fuzztime 30s -run=^$ fails with "cannot use -fuzz flag with multiple packages"
+      # This is because I'm testing all packages within the repository whereas Fuzz testing is designed to operate on a single package at a time. The -fuzz flag is incompatible with the ... wildcard.
+      # This approach uses shell commands to find packages containing fuzz tests and then runs go test on each one individually.
       - name: Execute fuzz tests
-        run: go test ./... -fuzz Fuzz -fuzztime 30s -run=^$
+        run: |
+          for pkg in $(go list ./... | xargs -I{} sh -c 'if go list -f "{{\"${{range .TestGoFiles}}{{.}}{{\"${{end}}}}\"}}" {} | grep -q "Fuzz"; then echo {}; fi'); do
+            go test "$pkg" -fuzz Fuzz -fuzztime 30s -run=^$
+          done
 
       # Run static check, which is a sort of official "state of the art linter".
       - name: Static check
