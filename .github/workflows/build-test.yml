@@ -52,8 +52,7 @@ jobs:
       - name: Execute fuzz tests
         run: |
           while IFS= read -r pkg; do
-            has_fuzz=$(go list -f '{{range .TestGoFiles}}{{$.Dir}}/{{.}}{{end}}' "$pkg" | xargs -I{} sh -c 'if [ -f "{}" ]; then grep -q "func Fuzz" "{}"; echo $?; else exit 1; fi')
-            if [[ "$has_fuzz" == *"0"* ]]; then
+            if go list -f '{{range .TestGoFiles}}{{$.Dir}}/{{.}}{{end}}' "$pkg" | grep -q "func Fuzz"; then
               go test "$pkg" -fuzz=Fuzz -fuzztime=30s -run=^$
             fi
           done < <(go list ./...)
