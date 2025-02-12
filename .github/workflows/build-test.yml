@@ -52,9 +52,13 @@ jobs:
       - name: Execute fuzz tests
         run: |
           while IFS= read -r pkg; do
-            if go list -f '{{range .TestGoFiles}}{{$.Dir}}/{{.}}{{end}}' "$pkg" | grep -q "func Fuzz"; then
-              go test "$pkg" -fuzz=Fuzz -fuzztime=30s -run=^$
-            fi
+            go_files=$(go list -f '{{ join .TestGoFiles "\n" }}' "$pkg")
+            while IFS= read -r file; do
+              if grep -q "func Fuzz" "$pkg/$file"; then
+                go test "$pkg" -fuzz=Fuzz -fuzztime=30s -run=^$
+                break # Exit the inner loop after finding the first fuzz test
+              fi
+            done <<< "$go_files"
           done < <(go list ./...)
 
       # Run static check, which is a sort of official "state of the art linter".
