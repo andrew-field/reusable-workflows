@@ -35,6 +35,7 @@ jobs:
         run: go build ./...
 
       # Runs the unit tests. Can not run the fuzz tests here because of the coverprofile flag which is designed for specific, defined tests with predictable inputs and outputs.
+      # Nowadays, go test also runs go vet, which is a sort of go code checker.
       - name: Test and run coverage
         run: go test ./... -coverprofile=coverage.out -covermode=atomic ${{ inputs.test_flags }} \;
 
