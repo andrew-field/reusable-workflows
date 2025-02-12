@@ -48,3 +48,10 @@ jobs:
       # Runs just the fuzz tests.
       - name: Execute fuzz tests
         run: go test ./... -fuzz Fuzz -fuzztime 30s -run=^$
+
+      # Run static check, which is a sort of official "state of the art linter".
+      - name: Static check
+        uses: dominikh/staticcheck-action@v1
+        with:
+          version: "latest"
+          install-go: false
