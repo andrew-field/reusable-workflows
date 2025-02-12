@@ -51,15 +51,26 @@ jobs:
       # This approach uses shell commands to find packages containing fuzz tests and then runs go test on each one individually.
       - name: Execute fuzz tests
         run: |
-          while IFS= read -r pkg; do
-            go_files=$(go list -f '{{ join .TestGoFiles "\n" }}' "$pkg")
-            while IFS= read -r file; do
-              if grep -q "func Fuzz" "$pkg/$file"; then
-                go test "$pkg" -fuzz=Fuzz -fuzztime=30s -run=^$
-                break # Exit the inner loop after finding the first fuzz test
-              fi
-            done <<< "$go_files"
-          done < <(go list ./...)
+          # Find all Go files that contain a fuzz test function.
+          # This looks for any line containing 'func Fuzz' in files ending in .go.
+          # Adjust the grep pattern if your naming convention differs.
+          fuzz_files=$(find . -type f -name '*.go' -exec grep -l 'func Fuzz' {} +)
+
+          # If no files are found, exit gracefully.
+          if [ -z "$fuzz_files" ]; then
+            echo "No fuzz tests found."
+            exit 0
+          fi
+
+          # Extract the unique directories (packages) that contain fuzz tests.
+          # Using xargs with 'dirname' ensures we get the package path.
+          mapfile -t packages < <(echo "$fuzz_files" | xargs -n1 dirname | sort -u)
+
+          # Run the Go test command with fuzzing parameters for each package.
+          for pkg in "${packages[@]}"; do
+            echo "Running fuzz tests in package: $pkg"
+            go test "$pkg" -fuzz=Fuzz -fuzztime=30s -run=^$
+          done
 
       # Run static check, which is a sort of official "state of the art linter".
       - name: Static check
