@@ -51,6 +51,9 @@ jobs:
       # This approach uses shell commands to find packages containing fuzz tests and then runs go test on each one individually.
       - name: Execute fuzz tests
         run: |
+          #!/bin/bash
+          set -euo pipefail
+
           # Find all Go files that contain a fuzz test function.
           # This looks for any line containing 'func Fuzz' in files ending in .go.
           # Adjust the grep pattern if your naming convention differs.
