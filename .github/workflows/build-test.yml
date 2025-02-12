@@ -55,7 +55,8 @@ jobs:
 
           # Find all Go files that contain a fuzz test function.
           # This looks for any line containing 'func Fuzz' in files ending in .go.
-          fuzz_files=$(find . -type f -name '*.go' -exec grep -l 'func Fuzz' {} +)
+          # Append "|| true" to prevent the script from exiting if grep returns no matches.
+          fuzz_files=$(find . -type f -name '*.go' -exec grep -l 'func Fuzz' {} + || true)
 
           # If no files are found, exit gracefully.
           if [ -z "$fuzz_files" ]; then
