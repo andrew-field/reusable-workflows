@@ -51,13 +51,12 @@ jobs:
       # This approach uses shell commands to find packages containing fuzz tests and then runs go test on each one individually.
       - name: Execute fuzz tests
         run: |
-          go_files=$(go list -f '{{ join .TestGoFiles "\n" }}' ./...)
-          while IFS= read -r file; do
-            if grep -q "Fuzz" "$file"; then
-              pkg=$(go list -f '{{ .Dir }}' "$file")
-              go test -tags=fuzz "$pkg" -fuzz=Fuzz -fuzztime=30s
+          while IFS= read -r pkg; do
+            has_fuzz=$(go list -f '{{range .TestGoFiles}}{{$.Dir}}/{{.}}{{end}}' "$pkg" | xargs -I{} sh -c 'if [ -f "{}" ]; then grep -q "func Fuzz" "{}"; echo $?; else exit 1; fi')
+            if [[ "$has_fuzz" == *"0"* ]]; then
+              go test "$pkg" -fuzz=Fuzz -fuzztime=30s -run=^$
             fi
-          done <<< "$go_files"
+          done < <(go list ./...)
 
       # Run static check, which is a sort of official "state of the art linter".
       - name: Static check
