@@ -7,8 +7,7 @@ on:
       checkout_ref:
         description: "Reference to use when checking out the code"
         required: false
-        type: string
-        #default: '' # This might already be the defaut.
+        type: string # This default is ''.
 
 jobs:
   build:
