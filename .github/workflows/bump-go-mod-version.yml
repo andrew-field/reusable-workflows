@@ -31,6 +31,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
+          token: ${{ secrets.BUMP_GO_VERSION_TOKEN }} # Needs to use a PAT token to trigger Github Actions CI Checks.
           commit-message: "feat: update go mod version to ${{ env.latest_go_version }}"
           sign-commits: true
           branch: bump-go-mod
