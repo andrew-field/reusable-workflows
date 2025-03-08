@@ -8,7 +8,7 @@ on:
         description: "Reference to use when checking out the code"
         required: false
         type: string
-        default: ''
+        #default: '' # This might already be the defaut.
 
 jobs:
   build:
@@ -24,7 +24,7 @@ jobs:
           # list of changed files within `super-linter`
           fetch-depth: 0
           # When the input is '' (which is the default), it does not explicitly specify a reference, and it will fall back to its default behaviour.
-          ref: ${{ inputs.test_flags }} # Access via the inputs context.
+          ref: ${{ inputs.checkout_ref }} # Access via the inputs context.
 
       # Run the super linter.
       - name: Super-Linter
