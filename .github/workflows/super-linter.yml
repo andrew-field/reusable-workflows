@@ -48,6 +48,7 @@ jobs:
           FIx_MARKDOWN_PRETTIER: true
       - name: Commit and push linting fixes
         id: auto-commit-action #mandatory for the output to show up in ${{ steps }}
+        if: ${{ always() }}
         # Run only on:
         # - Pull requests
         # - Not on the default branch
