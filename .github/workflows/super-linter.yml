@@ -11,83 +11,24 @@ on:
 
 jobs:
   build:
-    name: Lint
+    name: Lint Code Base
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      packages: read
-      # To report GitHub Actions status checks
-      statuses: write
-
     steps:
-      - name: Checkout code
+      # Get the code.
+      - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          # super-linter needs the full git history to get the
-          # list of files that changed across commits
+          # Full git history is needed to get a proper
+          # list of changed files within `super-linter`
           fetch-depth: 0
+          # When the input is '' (which is the default), it does not explicitly specify a reference, and it will fall back to its default behaviour.
+          ref: ${{ inputs.checkout_ref }} # Access via the inputs context.
 
-      - name: Super-linter
-        uses: super-linter/super-linter/slim@v7.3.0 # x-release-please-version
-        env:
-          # To report GitHub Actions status checks
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  fix-lint-issues:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      # Run the super linter.
       - name: Super-Linter
-        uses: super-linter/super-linter/slim@v7
+        uses: super-linter/super-linter/slim@v7 # Slimmed down version but still has al the main go, markdown etc. linters.
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Set your fix mode variables to true
-          FIX_MARKDOWN: true # This is the default.
-          FIx_MARKDOWN_PRETTIER: true
-      - name: Commit and push linting fixes
-        id: auto-commit-action #mandatory for the output to show up in ${{ steps }}
-        if: ${{ always() }}
-        # Run only on:
-        # - Pull requests
-        # - Not on the default branch
-        # if: >
-        #  github.event_name == 'pull_request' &&
-        #  github.ref_name != github.event.repository.default_branch
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: fix linting issues"
-          #branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
-          
-          #commit_user_name: super-linter
-          #commit_user_email: super-linter@super-linter.dev
-      - name: "Run if changes have been detected"
-        if: steps.auto-commit-action.outputs.changes_detected == 'true'
-        run: echo "Changes!"
-
-      - name: "Run if no changes have been detected"
-        if: steps.auto-commit-action.outputs.changes_detected == 'false'
-        run: echo "No Changes!"
-#  build:
-#    name: Lint Code Base
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      # Get the code.
-#      - name: Checkout Code
-#        uses: actions/checkout@v4
-#        with:
-#          # Full git history is needed to get a proper
-#          # list of changed files within `super-linter`
-#          fetch-depth: 0
-#          # When the input is '' (which is the default), it does not explicitly specify a reference, and it will fall back to its default behaviour.
-#          ref: ${{ inputs.checkout_ref }} # Access via the inputs context.
-#
-#      # Run the super linter.
-#      - name: Super-Linter
-#        uses: super-linter/super-linter/slim@v7 # Slimmed down version but still has al the main go, markdown etc. linters.
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Access via the secrets context. The GITHUB_TOKEN is automatically inherited.
-#          VALIDATE_GO_RELEASER: false
-#          VALIDATE_GO: false # This is false because VALIDATE_GO_MODULES does all the go linting.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Access via the secrets context. The GITHUB_TOKEN is automatically inherited.
+          VALIDATE_GO_RELEASER: false
+          VALIDATE_GO: false # This is false because VALIDATE_GO_MODULES does all the go linting.
