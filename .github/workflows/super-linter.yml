@@ -21,7 +21,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Set your fix mode variables to true
-          # FIX_MARKDOWN_PRETTIER: true This is the default.
+          FIX_MARKDOWN_PRETTIER: true # This is the default.
       - name: Commit and push linting fixes
         # Run only on:
         # - Pull requests
