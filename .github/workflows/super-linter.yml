@@ -10,25 +10,50 @@ on:
         type: string # This default is ''.
 
 jobs:
-  build:
-    name: Lint Code Base
+  fix-lint-issues:
     runs-on: ubuntu-latest
-
     steps:
-      # Get the code.
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          # Full git history is needed to get a proper
-          # list of changed files within `super-linter`
           fetch-depth: 0
-          # When the input is '' (which is the default), it does not explicitly specify a reference, and it will fall back to its default behaviour.
-          ref: ${{ inputs.checkout_ref }} # Access via the inputs context.
-
-      # Run the super linter.
       - name: Super-Linter
-        uses: super-linter/super-linter/slim@v7 # Slimmed down version but still has al the main go, markdown etc. linters.
+        uses: super-linter/super-linter/slim@v7
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Access via the secrets context. The GITHUB_TOKEN is automatically inherited.
-          VALIDATE_GO_RELEASER: false
-          VALIDATE_GO: false # This is false because VALIDATE_GO_MODULES does all the go linting.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Set your fix mode variables to true
+          # FIX_MARKDOWN_PRETTIER: true This is the default.
+      - name: Commit and push linting fixes
+        # Run only on:
+        # - Pull requests
+        # - Not on the default branch
+        if: >
+          github.event_name == 'pull_request' &&
+          github.ref_name != github.event.repository.default_branch
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
+          commit_message: "chore: fix linting issues"
+          commit_user_name: super-linter
+          commit_user_email: super-linter@super-linter.dev
+#  build:
+#    name: Lint Code Base
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      # Get the code.
+#      - name: Checkout Code
+#        uses: actions/checkout@v4
+#        with:
+#          # Full git history is needed to get a proper
+#          # list of changed files within `super-linter`
+#          fetch-depth: 0
+#          # When the input is '' (which is the default), it does not explicitly specify a reference, and it will fall back to its default behaviour.
+#          ref: ${{ inputs.checkout_ref }} # Access via the inputs context.
+#
+#      # Run the super linter.
+#      - name: Super-Linter
+#        uses: super-linter/super-linter/slim@v7 # Slimmed down version but still has al the main go, markdown etc. linters.
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Access via the secrets context. The GITHUB_TOKEN is automatically inherited.
+#          VALIDATE_GO_RELEASER: false
+#          VALIDATE_GO: false # This is false because VALIDATE_GO_MODULES does all the go linting.
