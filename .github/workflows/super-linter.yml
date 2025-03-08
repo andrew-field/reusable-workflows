@@ -47,6 +47,7 @@ jobs:
           FIX_MARKDOWN: true # This is the default.
           FIx_MARKDOWN_PRETTIER: true
       - name: Commit and push linting fixes
+        id: auto-commit-action #mandatory for the output to show up in ${{ steps }}
         # Run only on:
         # - Pull requests
         # - Not on the default branch
@@ -60,6 +61,13 @@ jobs:
           
           #commit_user_name: super-linter
           #commit_user_email: super-linter@super-linter.dev
+      - name: "Run if changes have been detected"
+        if: steps.auto-commit-action.outputs.changes_detected == 'true'
+        run: echo "Changes!"
+
+      - name: "Run if no changes have been detected"
+        if: steps.auto-commit-action.outputs.changes_detected == 'false'
+        run: echo "No Changes!"
 #  build:
 #    name: Lint Code Base
 #    runs-on: ubuntu-latest
