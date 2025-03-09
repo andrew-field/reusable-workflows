@@ -22,13 +22,13 @@ jobs:
         # Fetch the latest go version as text to build and test with the latest go version.
         # This works under the principle of keeping up to date with the latest releases.
       - name: Get latest go version
-        run: echo "latest_go_version=$(curl https://go.dev/VERSION?m=text | grep -oP '(\d+\.\d+\.\d+)')" >> $GITHUB_ENV
+        run: echo "latest_go_version=$(curl https://go.dev/VERSION?m=text | grep -oP '(\d+\.\d+\.\d+)')" >> $GITHUB_ENV # Store as an environment variable.
 
         # Get the latest go runtime.
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: ${{ env.latest_go_version }}
+          go-version: ${{ env.latest_go_version }} # Access via the environment context.
 
       # Make sure all packages build.
       - name: Build
@@ -47,8 +47,8 @@ jobs:
 
       # Runs just the fuzz tests.
       # Using go test ./... -fuzz Fuzz -fuzztime 30s -run=^$ fails with "cannot use -fuzz flag with multiple packages"
-      # This is because I'm testing all packages within the repository whereas Fuzz testing is designed to operate on a single package at a time. The -fuzz flag is incompatible with the ... wildcard.
-      # This approach uses shell commands to find packages containing fuzz tests and then runs go test on each one individually.
+      # This is because I'm testing all packages within the repository whereas Fuzz testing is designed to operate on a single package at a time.
+      # The -fuzz flag is incompatible with the ... wildcard. This approach uses shell commands to find packages containing fuzz tests and then runs go test on each one individually.
       - name: Execute fuzz tests
         run: |
           set -euo pipefail
