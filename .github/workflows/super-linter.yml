@@ -3,11 +3,6 @@ name: Super Linter
 
 on:
   workflow_call:
-    inputs:
-      checkout_ref:
-        description: "Reference to use when checking out the code"
-        required: false
-        type: string # This default is ''.
 
 jobs:
   build:
@@ -22,8 +17,6 @@ jobs:
           # Full git history is needed to get a proper
           # list of changed files within `super-linter`
           fetch-depth: 0
-          # When the input is '' (which is the default), it does not explicitly specify a reference, and it will fall back to its default behaviour.
-          ref: ${{ inputs.checkout_ref }} # Access via the inputs context.
 
       # Run the super linter.
       - name: Super-Linter
