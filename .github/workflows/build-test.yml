@@ -34,10 +34,11 @@ jobs:
       - name: Build
         run: go build ./...
 
-      # Runs the unit tests. Can not run the fuzz tests here because of the coverprofile flag which is designed for specific, defined tests with predictable inputs and outputs.
-      # Nowadays, go test also runs go vet, which is a sort of go code checker.
+      # Run the unit tests. Can not run the fuzz tests here because of the coverprofile flag which is designed for specific, defined tests with predictable inputs and outputs.
+      # go test also runs go vet, which is a go code checker. By default, only a subset of all the vet checks are run by go test
+      # unless the -vet=all flag is set. https://pkg.go.dev/cmd/go#hdr-Test_packages
       - name: Test and run coverage
-        run: go test ./... -coverprofile=coverage.out -covermode=atomic ${{ inputs.test_flags }} \;
+        run: go test ./... -vet=all -coverprofile=coverage.out -covermode=atomic ${{ inputs.test_flags }} \;
 
       # Upload the test results to Codecov.
       - name: Upload coverage to Codecov
