@@ -20,7 +20,7 @@ jobs:
 
       # Run the super linter.
       - name: Super-Linter
-        uses: super-linter/super-linter/slim@v7 # Slimmed down version but still has al the main go, markdown etc. linters.
+        uses: super-linter/super-linter/slim@v7 # Slimmed down version but still has all the main go, markdown etc. linters.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Access via the secrets context. The GITHUB_TOKEN is automatically inherited.
           VALIDATE_GO_RELEASER: false
