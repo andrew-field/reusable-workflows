@@ -40,7 +40,9 @@ jobs:
         uses: actions/create-github-app-token@v2
         id: app-token
         with:
-          app-id: ${{ vars.APP_ID }}
+          # The create-github-app-token example stores the App ID as an environment variable but it is just easier to pass secrets (using inherit)
+          # than to store and pass environment variables.
+          app-id: ${{ secrets.APP_ID }} 
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       # Create the pull request.
