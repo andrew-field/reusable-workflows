@@ -27,11 +27,29 @@ jobs:
       - name: Update go version in go mod # Update minimum go version
         run: go mod edit -go ${{ env.latest_go_version }}
 
+      # Go command to update all the dependencies
+      - name: Update go dependencies
+        run: go get -u ./...
+
+      # Go clean up
+      - name: Go mod tidy
+        run: go mod tidy
+
+      # Generate token.
+      - name: Get app token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       # Create the pull request.
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.BUMP_GO_VERSION_TOKEN }} # Needs to use a PAT token to trigger Github Actions CI Checks.
+          # Needs to use a PAT token to trigger Github Actions CI Checks. However, if using a Personal Access Token (PAT) the action will create the pull request, but commits will not be signed.
+          # Commit signing is only supported with bot generated tokens. The default GIIHUB_TOKEN will not trigger other workflows. Therefore, use a token generated using a GitHub App.
+          token: ${{ steps.app-token.outputs.token }}
           commit-message: "feat: Update go mod version to ${{ env.latest_go_version }}"
           sign-commits: true
           branch: bump-go-mod
