@@ -47,32 +47,38 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       # Runs just the fuzz tests.
-      # Using go test ./... -fuzz Fuzz -fuzztime 30s -run=^$ fails with "cannot use -fuzz flag with multiple packages"
-      # This is because I'm testing all packages within the repository whereas Fuzz testing is designed to operate on a single package at a time.
-      # The -fuzz flag is incompatible with the ... wildcard. This approach uses shell commands to find packages containing fuzz tests and then runs go test on each one individually.
+      # Using go test ./... -fuzz Fuzz -fuzztime 10s -run=^$ fails with "cannot use -fuzz flag with multiple packages"
+      # This is because I'm testing all packages within the repository whereas Fuzz testing is designed to operate on a single package (and single Fuzz test) at a time.
+      # The -fuzz flag is incompatible with the ... wildcard. # When specified, the command line argument must match exactly one package within the main module,
+      # and regexp must match exactly one fuzz test within that package. This approach loops through all the packages containing test files, finds all of the fuzz tests
+      # and then runs go test -Fuzz on each one. All fuzz tests need to be in a test file but this is the convention.
       - name: Execute fuzz tests
         run: |
-          set -euo pipefail
+          set -euo pipefail # Exit if any command fails, exit if an uninitialised variable is used, report a failure if any command in a pipeline fails, rather than just the last one.
 
-          # Find all Go files that contain a fuzz test function.
-          # This looks for any line containing 'func Fuzz' in files ending in .go.
-          # Append "|| true" to prevent the script from exiting if grep returns no matches.
-          fuzz_files=$(find . -type f -name '*.go' -exec grep -l 'func Fuzz' {} + || true)
+          # Get all the packages with test files. Could just use 'go list ./...' but this does an extra step to only include packages with test files. See https://pkg.go.dev/cmd/go#hdr-List_packages_or_modules
+          packages=$(go list -f '{{if .TestGoFiles}}{{.ImportPath}}{{end}}' ./...) 
 
-          # If no files are found, exit gracefully.
-          if [ -z "$fuzz_files" ]; then
-            echo "No fuzz tests found."
-            exit 0
-          fi
+          # For each package, run each fuzz test.
+          for package in $packages; do
+            # List all the fuzz tests. Filters this output to only include lines that begin with "Fuzz".
+            # This is important because go test -list Fuzz also prints ok and the package path, which we do not wish to interpret as fuzz test names.
+            # Use || true to avoid failing and exiting the script immediately if no fuzz tests are found for a particular package (grep command fails in this case).
+            fuzz_tests=$(go test $package -list Fuzz | grep ^Fuzz || true)
 
-          # Extract the unique directories (packages) that contain fuzz tests.
-          # Using xargs with 'dirname' ensures we get the package path.
-          mapfile -t packages < <(echo "$fuzz_files" | xargs -n1 dirname | sort -u)
+            if [ -z "$fuzz_tests" ]; then
+              echo "No fuzz tests found for package $package."
+              continue
+            fi
 
-          # Run the Go test command with fuzzing parameters for each package.
-          for pkg in "${packages[@]}"; do
-            echo "Running fuzz tests in package: $pkg"
-            go test "$pkg" -fuzz=Fuzz -fuzztime=30s -run=^$
+            echo "------------------------------------"
+            echo "The following fuzz tests will be run in $package:"
+            echo $fuzz_tests
+            echo "------------------------------------"
+
+            for fuzz_test in $fuzz_tests; do
+              go test $package -fuzz $fuzz_test -fuzztime=5s -run ^$ # go test -fuzz will run the other tests by default, so we need to specify -run ^$ (which matches nothing) to only run the fuzz test.
+            done
           done
 
       # Run static check, which is a sort of official "state of the art linter".
