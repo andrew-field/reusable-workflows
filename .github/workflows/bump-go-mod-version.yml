@@ -27,9 +27,9 @@ jobs:
       - name: Update go version in go mod # Update minimum go version
         run: go mod edit -go ${{ env.latest_go_version }}
 
-      # Go command to update all the dependencies
+      # Go command to update all the dependencies. Just do patch updates for now. With only stable dependencies it should be possible to just go get -u ./...
       - name: Update go dependencies
-        run: go get -u ./...
+        run: go get -u=patch ./...
 
       # Go clean up
       - name: Go mod tidy
