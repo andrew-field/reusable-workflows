@@ -20,9 +20,8 @@ jobs:
           fetch-depth: 2 # Needed I think for the test coverage report.
 
         # Fetch the latest go version as text to build and test with the latest go version.
-        # This works under the principle of keeping up to date with the latest releases.
       - name: Get latest go version
-        # Store as an environment variable. Good practise to have $GITHUB_ENV double quoted.
+        # Store as an environment variable. Good practise to have $GITHUB_ENV double quoted according to SC2086 – ShellCheck.
         run: echo "LATEST_GO_VERSION=$(curl https://go.dev/VERSION?m=text | grep -oP '(\d+\.\d+\.\d+)')" >> "$GITHUB_ENV"
 
         # Get the latest go runtime.
@@ -77,7 +76,7 @@ jobs:
             echo $fuzz_tests
             echo "------------------------------------"
 
-            for fuzz_test in $fuzz_tests; do
+            for fuzz_test in "$fuzz_tests"; do  # Good practise to use double quotes according to SC2086 - ShellCheck.
               go test $package -fuzz $fuzz_test -fuzztime=5s -run ^$ # go test -fuzz will run the other tests by default, so we need to specify -run ^$ (which matches nothing) to only run the fuzz test.
             done
           done
