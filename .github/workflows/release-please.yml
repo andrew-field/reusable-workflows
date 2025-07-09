@@ -3,6 +3,9 @@ name: Release Please
 on:
   workflow_call:
 
+# Permissions for the GITHUB_TOKEN.
+permissions: {}
+
 jobs:
   release-please:
     name: Call release please

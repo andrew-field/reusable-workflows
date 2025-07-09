@@ -3,6 +3,9 @@ name: Refresh go report card
 on:
   workflow_call:
 
+# Permissions for the GITHUB_TOKEN.
+permissions: {}
+
 jobs:
   post-request:
     name: Update go report card
