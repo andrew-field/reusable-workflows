@@ -64,7 +64,7 @@ jobs:
             # List all the fuzz tests. Filters this output to only include lines that begin with "Fuzz".
             # This is important because go test -list Fuzz also prints ok and the package path, which we do not wish to interpret as fuzz test names.
             # Use || true to avoid failing and exiting the script immediately if no fuzz tests are found for a particular package (grep command fails in this case).
-            fuzz_tests=$(go test $package -list Fuzz | grep ^Fuzz || true)
+            fuzz_tests=$(go test "$package" -list Fuzz | grep ^Fuzz || true) # Good practise to use double quotes according to SC2086 - ShellCheck.
 
             if [ -z "$fuzz_tests" ]; then
               echo "No fuzz tests found for package $package."
@@ -73,7 +73,7 @@ jobs:
 
             echo "------------------------------------"
             echo "The following fuzz tests will be run in $package:"
-            echo "$fuzz_tests"
+            echo "$fuzz_tests" # Good practise to use double quotes according to SC2086 - ShellCheck.
             echo "------------------------------------"
 
             for fuzz_test in $fuzz_tests; do
