@@ -6,6 +6,12 @@ on:
     branches: [master] # Include this so the super linter can also run for this reusable-workflows repository.
   workflow_call:
 
+  # Allows you to run this workflow manually from the Actions tab.
+  workflow_dispatch:
+
+# Permissions for the GITHUB_TOKEN. Default persissions are removed. These permissions will get overridden when the workflow is called from another workflow.
+permissions: {}
+
 jobs:
   build:
     name: Lint Code Base
