@@ -22,7 +22,8 @@ jobs:
         # Fetch the latest go version as text to build and test with the latest go version.
         # This works under the principle of keeping up to date with the latest releases.
       - name: Get latest go version
-        run: echo "LATEST_GO_VERSION=$(curl https://go.dev/VERSION?m=text | grep -oP '(\d+\.\d+\.\d+)')" >> $GITHUB_ENV # Store as an environment variable.
+        # Store as an environment variable. Good practise to have $GITHUB_ENV double quoted.
+        run: echo "LATEST_GO_VERSION=$(curl https://go.dev/VERSION?m=text | grep -oP '(\d+\.\d+\.\d+)')" >> "$GITHUB_ENV"
 
         # Get the latest go runtime.
       - name: Set up Go
