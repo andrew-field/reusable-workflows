@@ -9,10 +9,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab.
   workflow_dispatch:
 
-# Permissions for the GITHUB_TOKEN. Default persissions are removed. These permissions will get overridden when the workflow is called from another workflow.
-permissions:
-  contents: read
-
 jobs:
   build:
     name: Lint Code Base
