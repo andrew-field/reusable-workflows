@@ -10,7 +10,8 @@ on:
   workflow_dispatch:
 
 # Permissions for the GITHUB_TOKEN. Default persissions are removed. These permissions will get overridden when the workflow is called from another workflow.
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
   build:

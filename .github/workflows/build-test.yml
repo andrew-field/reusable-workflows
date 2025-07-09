@@ -73,11 +73,13 @@ jobs:
 
             echo "------------------------------------"
             echo "The following fuzz tests will be run in $package:"
-            echo $fuzz_tests
+            echo "$fuzz_tests"
             echo "------------------------------------"
 
-            for fuzz_test in "$fuzz_tests"; do  # Good practise to use double quotes according to SC2086 - ShellCheck.
-              go test $package -fuzz $fuzz_test -fuzztime=5s -run ^$ # go test -fuzz will run the other tests by default, so we need to specify -run ^$ (which matches nothing) to only run the fuzz test.
+            for fuzz_test in $fuzz_tests; do
+              # Good practise to use double quotes according to SC2086 - ShellCheck.
+              # go test -fuzz will run the other tests by default, so we need to specify -run ^$ (which matches nothing) to only run the fuzz test.
+              go test "$package" -fuzz "$fuzz_test" -fuzztime=5s -run ^$
             done
           done
 
