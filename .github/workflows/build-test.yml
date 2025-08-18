@@ -18,7 +18,7 @@ jobs:
     steps:
       # Get the code.
       - name: Checkout repoistory
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 2 # Needed I think for the test coverage report.
 
