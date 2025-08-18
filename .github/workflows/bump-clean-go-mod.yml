@@ -13,7 +13,7 @@ jobs:
     steps:
       # Get the code.
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # Fetch the latest go version as text to build and test with the latest go version.
       # This works under the principle of keeping up to date with the latest releases.
