@@ -23,7 +23,7 @@ jobs:
 
       # Get the latest go runtime.
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: ${{ env.LATEST_GO_VERSION }} # Access via the environment context.
 
