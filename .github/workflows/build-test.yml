@@ -20,6 +20,7 @@ jobs:
       - name: Checkout repoistory
         uses: actions/checkout@v5
         with:
+          persist-credentials: false
           fetch-depth: 2 # Needed I think for the test coverage report.
 
         # Fetch the latest go version as text to build and test with the latest go version.
