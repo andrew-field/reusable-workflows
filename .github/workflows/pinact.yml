@@ -1,0 +1,32 @@
+name: Pinact
+
+on:
+  workflow_call:
+  
+  # Include this so the super linter can also run for this reusable-workflows repository.
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+  # Allows you to run this workflow manually from the Actions tab.
+  workflow_dispatch:
+
+# Permissions for the GITHUB_TOKEN.
+permissions: {}
+
+jobs:
+  pinact:
+    name: Run pinact
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Pin actions
+        uses: suzuki-shunsuke/pinact-action@v1
+        with:
+          app_id: ${{secrets.APP_ID}}
+          app_private_key: ${{secrets.APP_PRIVATE_KEY}}

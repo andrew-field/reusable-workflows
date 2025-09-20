@@ -2,9 +2,13 @@ name: Super Linter
 # This super linter should be used as a guide and indicator, and is not correct all of the time.
 
 on:
-  push:
-    branches: [master] # Include this so the super linter can also run for this reusable-workflows repository.
   workflow_call:
+  
+  # Include this so the super linter can also run for this reusable-workflows repository.
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 
   # Allows you to run this workflow manually from the Actions tab.
   workflow_dispatch:
