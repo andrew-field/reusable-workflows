@@ -16,6 +16,9 @@ on:
 # checkov gives an error about ensuring the top level permissions are not set to write-all. Setting the permissions to something like permissions: contents: read however
 # creates a requirement to the calling workflows, which the public repositories do not satisfy as they do not need any set permissions.
 
+# Permissions for the GITHUB_TOKEN.
+permissions: {}
+
 jobs:
   build:
     name: Lint Code Base
