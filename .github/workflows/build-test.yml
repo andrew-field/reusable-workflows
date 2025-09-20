@@ -42,7 +42,7 @@ jobs:
       # go test also runs go vet, which is a go code checker. By default, only a subset of all the vet checks are run by go test
       # unless the -vet=all flag is set. https://pkg.go.dev/cmd/go#hdr-Test_packages
       - name: Test and run coverage
-        run: go test ./... -vet=all -coverprofile=coverage.out -covermode=atomic ${INPUTS_TEST_FLAGS} \;
+        run: go test ./... -vet=all -coverprofile=coverage.out -covermode=atomic "${INPUTS_TEST_FLAGS}" \;
         env:
           INPUTS_TEST_FLAGS: ${{ inputs.test_flags }}
 

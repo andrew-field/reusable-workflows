@@ -31,7 +31,7 @@ jobs:
 
       # Go command to edit the mod file and update the go version.
       - name: Update go version in go mod
-        run: go mod edit -go ${LATEST_GO_VERSION}
+        run: go mod edit -go "${LATEST_GO_VERSION}"
         env:
           LATEST_GO_VERSION: ${{ env.LATEST_GO_VERSION }}
 
