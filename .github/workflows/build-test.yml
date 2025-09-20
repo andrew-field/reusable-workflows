@@ -17,9 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Get the code.
-      - name: Checkout repoistory
-        uses: actions/checkout@v5
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
+          persist-credentials: false
           fetch-depth: 2 # Needed I think for the test coverage report.
 
         # Fetch the latest go version as text to build and test with the latest go version.
@@ -29,7 +30,7 @@ jobs:
 
         # Get the latest go runtime.
       - name: Set up Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
         with:
           go-version: ${{ env.LATEST_GO_VERSION }} # Access via the environment context.
 
@@ -41,11 +42,13 @@ jobs:
       # go test also runs go vet, which is a go code checker. By default, only a subset of all the vet checks are run by go test
       # unless the -vet=all flag is set. https://pkg.go.dev/cmd/go#hdr-Test_packages
       - name: Test and run coverage
-        run: go test ./... -vet=all -coverprofile=coverage.out -covermode=atomic ${{ inputs.test_flags }} \;
+        run: go test ./... -vet=all -coverprofile=coverage.out -covermode=atomic "${INPUTS_TEST_FLAGS}" \;
+        env:
+          INPUTS_TEST_FLAGS: ${{ inputs.test_flags }}
 
       # Upload the test results to Codecov.
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -88,7 +91,7 @@ jobs:
 
       # Run static check, which is a sort of official "state of the art linter".
       - name: Static check
-        uses: dominikh/staticcheck-action@v1
+        uses: dominikh/staticcheck-action@024238d2898c874f26d723e7d0ff4308c35589a2 # v1.4.0
         with:
           version: "latest"
           install-go: false

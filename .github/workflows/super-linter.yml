@@ -2,15 +2,22 @@ name: Super Linter
 # This super linter should be used as a guide and indicator, and is not correct all of the time.
 
 on:
-  push:
-    branches: [master] # Include this so the super linter can also run for this reusable-workflows repository.
   workflow_call:
+
+  # Include this so the super linter can also run for this reusable-workflows repository.
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 
   # Allows you to run this workflow manually from the Actions tab.
   workflow_dispatch:
 
 # checkov gives an error about ensuring the top level permissions are not set to write-all. Setting the permissions to something like permissions: contents: read however
 # creates a requirement to the calling workflows, which the public repositories do not satisfy as they do not need any set permissions.
+
+# Permissions for the GITHUB_TOKEN.
+permissions: {}
 
 jobs:
   build:
@@ -20,15 +27,16 @@ jobs:
     steps:
       # Get the code.
       - name: Checkout Code
-        uses: actions/checkout@v5
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
+          persist-credentials: false
           # Full git history is needed to get a proper
           # list of changed files within `super-linter`
           fetch-depth: 0
 
       # Run the super linter.
       - name: Super-Linter
-        uses: super-linter/super-linter/slim@v8 # Slimmed down version but still has all the main go, markdown etc. linters.
+        uses: super-linter/super-linter/slim@ffde3b2b33b745cb612d787f669ef9442b1339a6 # v8.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Access via the secrets context. The GITHUB_TOKEN is automatically inherited.
           VALIDATE_GO_RELEASER: false
