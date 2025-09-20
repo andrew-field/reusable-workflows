@@ -13,8 +13,7 @@ on:
   workflow_dispatch:
 
 # Permissions for the GITHUB_TOKEN.
-permissions:
-  pull-requests: write
+permissions: {}
 
 jobs:
   pinact:
