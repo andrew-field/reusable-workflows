@@ -3,7 +3,7 @@ name: Pinact
 on:
   workflow_call:
 
-  # Include this so the super linter can also run for this reusable-workflows repository.
+  # Include this so pinact can also run for this reusable-workflows repository.
   push:
     branches: [master]
   pull_request:
