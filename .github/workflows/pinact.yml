@@ -14,7 +14,7 @@ on:
 
 # Permissions for the GITHUB_TOKEN.
 permissions:
-  contents: write
+  workflows: write
 
 jobs:
   pinact:
