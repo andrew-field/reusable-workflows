@@ -31,7 +31,9 @@ jobs:
 
       # Go command to edit the mod file and update the go version.
       - name: Update go version in go mod
-        run: go mod edit -go ${{ env.LATEST_GO_VERSION }}
+        run: go mod edit -go ${LATEST_GO_VERSION}
+        env:
+          LATEST_GO_VERSION: ${{ env.LATEST_GO_VERSION }}
 
       # Go command to update all the dependencies. Just do patch updates for now. With only stable dependencies it should be possible to just go get -u ./...
       - name: Update go dependencies
