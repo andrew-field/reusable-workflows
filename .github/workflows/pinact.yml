@@ -9,8 +9,6 @@ on:
         required: true
 
   # Include this so pinact can also run for this reusable-workflows repository.
-  push:
-    branches: [master]
   pull_request:
     branches: [master]
 
