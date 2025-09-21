@@ -18,6 +18,9 @@ jobs:
   build_test:
     name: Build and test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
     steps:
       # Get the code.
       - name: Checkout repository
