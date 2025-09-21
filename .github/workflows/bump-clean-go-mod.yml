@@ -2,14 +2,22 @@ name: Bump clean go mod
 
 on:
   workflow_call:
+    secrets:
+      APP_ID:
+        required: true
+      APP_PRIVATE_KEY:
+        required: true
 
-# checkov gives an error about ensuring the top level permissions are not set to write-all. Setting the permissions to something like permissions: contents: read however
-# creates a requirement to the calling workflows, which the public repositories do not satisfy as they do not need any set permissions.
+# Permissions for the GITHUB_TOKEN.
+permissions: {}
 
 jobs:
   check_go_mod:
     name: Bump and clean go mod
     runs-on: ubuntu-latest
+    permissions: # This workflow is used by both public and private repositories. The read permission is necessary for private repositories.
+      contents: read
+
     steps:
       # Get the code.
       - name: Checkout repository
@@ -48,8 +56,7 @@ jobs:
         uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
         id: app-token
         with:
-          # The create-github-app-token example stores the App ID as an environment variable but it is just easier to pass secrets (using inherit)
-          # than to store and pass environment variables.
+          # The create-github-app-token example stores the App ID as an environment variable but it is just easier to pass secrets than to store and pass environment variables.
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
