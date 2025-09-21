@@ -18,7 +18,7 @@ jobs:
   build_test:
     name: Build and test
     runs-on: ubuntu-latest
-    permissions:
+    permissions: # This workflow is used by both public and private repositories. The read permission is necessary for private repositories.
       contents: read
 
     steps:

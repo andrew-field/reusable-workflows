@@ -15,6 +15,9 @@ jobs:
   check_go_mod:
     name: Bump and clean go mod
     runs-on: ubuntu-latest
+    permissions: # This workflow is used by both public and private repositories. The read permission is necessary for private repositories.
+      contents: read
+
     steps:
       # Get the code.
       - name: Checkout repository
