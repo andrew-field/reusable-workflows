@@ -11,10 +11,10 @@ jobs:
   tag-and-release:
     name: Tag and release
     runs-on: ubuntu-latest
-    
+
     # Explicitly grant permissions to the GITHUB_TOKEN. Required to push tags and create releases.
     permissions:
-      contents: write 
+      contents: write
 
     steps:
       # Get the code.
