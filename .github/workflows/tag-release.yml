@@ -1,0 +1,37 @@
+name: Auto tag and release
+
+on:
+  push:
+    branches: [master]
+
+# Permissions for the GITHUB_TOKEN.
+permissions: {}
+
+jobs:
+  tag-and-release:
+    name: Tag and release
+    runs-on: ubuntu-latest
+    
+    # Explicitly grant permissions to the GITHUB_TOKEN. Required to push tags and create releases.
+    permissions:
+      contents: write 
+
+    steps:
+      # Get the code.
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+          fetch-depth: 0 # Required to fetch all tags for semantic versioning
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@a22cf08638b34d5badda920f9daf6e72c477b07b # v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # The default version bump is a patch.
+
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@b7eabc95ff50cbeeedec83973935c8f306dfcd0b # v1.20.0
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
