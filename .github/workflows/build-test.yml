@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       test_flags:
-        description: "Extra flags to be used with the go test step"
+        description: "Extra flags to be used with the go test step."
         required: false
         type: string
     secrets:
