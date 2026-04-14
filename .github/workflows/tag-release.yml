@@ -24,16 +24,8 @@ jobs:
           persist-credentials: false
           fetch-depth: 0 # Required to fetch all tags for semantic versioning
 
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@a22cf08638b34d5badda920f9daf6e72c477b07b # v6.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          # The default version bump is a patch.
-
       - name: Create a GitHub release
-        run: gh release create ${TAG} --generate-notes
+        run: gh release create --generate-notes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ steps.tag_version.outputs.new_tag }}
 
