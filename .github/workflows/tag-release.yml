@@ -36,4 +36,3 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ steps.tag_version.outputs.new_tag }}
-
