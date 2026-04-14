@@ -31,3 +31,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # The default version bump is a patch.
 
+      - name: Create a GitHub release
+        run: gh release create "${TAG}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag_version.outputs.new_tag }}
+
