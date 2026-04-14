@@ -29,7 +29,7 @@ jobs:
         uses: mathieudutour/github-tag-action@a22cf08638b34d5badda920f9daf6e72c477b07b # v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # The default version bump is a patch.
+          # The default version bump is a patch but seems to change with the commit message, e.g. "feat:".
 
       - name: Create a GitHub release
         run: gh release create "${TAG}"
