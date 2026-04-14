@@ -32,6 +32,8 @@ jobs:
           # The default version bump is a patch.
 
       - name: Create a GitHub release
-        run: gh release create ${{ steps.tag_version.outputs.new_tag }} --generate-notes
+        run: gh release create ${TAG} --generate-notes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag_version.outputs.new_tag }}
+
