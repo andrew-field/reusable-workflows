@@ -26,7 +26,17 @@ jobs:
     name: Lint Code Base
     runs-on: ubuntu-latest
     permissions: # This workflow is used by both public and private repositories. The read permission is necessary for private repositories.
+      # From the super linter example:
+      # contents permission to clone the repository
       contents: read
+      packages: read
+      # issues and pull-requests permissions to write results as pull
+      # request comments. Omit them if you don't need summary comments
+      issues: write
+      pull-requests: write
+      # To report GitHub Actions status checks. Omit if you don't need
+      # to update commit status
+      statuses: write
 
     steps:
       # Get the code.
