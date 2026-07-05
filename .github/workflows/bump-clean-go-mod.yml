@@ -3,7 +3,7 @@ name: Bump clean go mod
 on:
   workflow_call:
     secrets:
-      APP_ID:
+      APP_CLIENT_ID:
         required: true
       APP_PRIVATE_KEY:
         required: true
@@ -57,8 +57,9 @@ jobs:
         id: app-token
         with:
           # The create-github-app-token example stores the App ID as an environment variable but it is just easier to pass secrets than to store and pass environment variables.
-          app-id: ${{ secrets.APP_ID }}
+          client-id: ${{ secrets.APP_CLIENT_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          permission-pull-requests: write
 
       # Create the pull request.
       - name: Create Pull Request
