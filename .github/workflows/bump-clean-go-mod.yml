@@ -59,6 +59,9 @@ jobs:
           # The create-github-app-token example stores the App ID as an environment variable but it is just easier to pass secrets than to store and pass environment variables.
           client-id: ${{ secrets.APP_CLIENT_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          # I think by default the token generated would be for all of the permissions as defined in the app.
+          # The linter wanted more restrictive permissions, so they are stricttly defined here, but still can not exceed those defined in the app.
+          permission-contents: write
           permission-pull-requests: write
 
       # Create the pull request.
