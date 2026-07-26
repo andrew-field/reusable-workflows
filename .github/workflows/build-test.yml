@@ -7,9 +7,6 @@ on:
         description: "Extra flags to be used with the go test step."
         required: false
         type: string
-    secrets:
-      CODECOV_TOKEN:
-        required: true
 
 # Permissions for the GITHUB_TOKEN.
 permissions: {}
