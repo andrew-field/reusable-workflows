@@ -44,24 +44,18 @@ jobs:
       - name: Build
         run: go build ./...
 
-      # Run the unit tests. Can not run the fuzz tests here because of the coverprofile flag which is designed for specific, defined tests with predictable inputs and outputs.
+      # Run the unit tests. Can not run the fuzz tests here.
       # go test also runs go vet, which is a go code checker. By default, only a subset of all the vet checks are run by go test
       # unless the -vet=all flag is set. https://pkg.go.dev/cmd/go#hdr-Test_packages
       - name: Test and run coverage
-        run: go test ./... -vet=all -coverprofile=coverage.out -covermode=atomic "${INPUTS_TEST_FLAGS}" \;
+        run: go test ./... -vet=all "${INPUTS_TEST_FLAGS}"
         env:
           INPUTS_TEST_FLAGS: ${{ inputs.test_flags }}
-
-      # Upload the test results to Codecov.
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
 
       # Runs just the fuzz tests.
       # Using go test ./... -fuzz Fuzz -fuzztime 10s -run=^$ fails with "cannot use -fuzz flag with multiple packages"
       # This is because I'm testing all packages within the repository whereas Fuzz testing is designed to operate on a single package (and single Fuzz test) at a time.
-      # The -fuzz flag is incompatible with the ... wildcard. # When specified, the command line argument must match exactly one package within the main module,
+      # The -fuzz flag is incompatible with the ... wildcard. When specified, the command line argument must match exactly one package within the main module,
       # and regexp must match exactly one fuzz test within that package. This approach loops through all the packages containing test files, finds all of the fuzz tests
       # and then runs go test -Fuzz on each one. All fuzz tests need to be in a test file but this is the convention.
       - name: Execute fuzz tests
@@ -91,7 +85,7 @@ jobs:
             for fuzz_test in $fuzz_tests; do
               # Good practise to use double quotes according to SC2086 - ShellCheck.
               # go test -fuzz will run the other tests by default, so we need to specify -run ^$ (which matches nothing) to only run the fuzz test.
-              go test "$package" -fuzz "$fuzz_test" -fuzztime=5s -run ^$
+              go test "$package" -fuzz "$fuzz_test" -fuzztime=6s -run ^$
             done
           done
 
