@@ -50,7 +50,7 @@ jobs:
 
       # Run the super linter.
       - name: Super-Linter
-        uses: super-linter/super-linter/slim@4ce20838b8ab83717e78138c5b3a1407148e0918 # v8.7.0
+        uses: super-linter/super-linter/slim@2da136927bd4a73596db63044b504547c62cb854 # v9.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Access via the secrets context. The GITHUB_TOKEN is automatically inherited.
           VALIDATE_GO_RELEASER: false
